@@ -1,0 +1,48 @@
+local Players = game:GetService("Players")
+local Player = Players.LocalPlayer
+local ScreenGui = Instance.new("ScreenGui")
+local Frame = Instance.new("Frame")
+local TextLabel = Instance.new("TextLabel")
+local TextButton = Instance.new("TextButton")
+
+ScreenGui.Parent = Player.PlayerGui
+Frame.Parent = ScreenGui
+Frame.Active = true
+Frame.Draggable = true
+Frame.Position = UDim2.new(0.5, -200, 0.5, -200)
+Frame.Size = UDim2.new(0, 400, 0, 400)
+
+TextLabel.Parent = Frame
+TextLabel.Position = UDim2.new(0, 10, 0, 10)
+TextLabel.Size = UDim2.new(1, -20, 0, 50)
+TextLabel.Text = "Scan Game"
+TextLabel.Font = Enum.Font.SourceSans
+TextLabel.TextSize = 30
+TextLabel.TextWrapped = true
+
+TextButton.Parent = Frame
+TextButton.Position = UDim2.new(0, 10, 0, 80)
+TextButton.Size = UDim2.new(0, 380, 0, 50)
+TextButton.Text = "Scan for Scripts"
+TextButton.Font = Enum.Font.SourceSans
+TextButton.TextSize = 20
+TextButton.TextWrapped = true
+
+local function scanScripts()
+    local scripts = {}
+    local function scan(item)
+        if item:IsA("LocalScript") or item:IsA("ModuleScript") then
+            table.insert(scripts, item)
+        end
+        for _, child in pairs(item:GetChildren()) do
+            scan(child)
+        end
+    end
+    scan(game)
+    for _, script in pairs(scripts) do
+        print(script.Name)
+    end
+    print(#scripts .. " Scripts found.")
+end
+
+TextButton.MouseButton1Click:Connect(scanScripts)
