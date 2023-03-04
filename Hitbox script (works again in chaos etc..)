@@ -1,0 +1,83 @@
+-- set the allowed username
+local allowedUsername = "!Ur username here!"
+
+-- get the current player and check if they are allowed to execute the script
+local player = game.Players.LocalPlayer
+if player.Name ~= allowedUsername then
+    player:Kick("You are not allowed to execute this script.")
+    game.StarterGui:SetCore("SendNotification", {
+        Title = "Access Denied";
+        Text = "You are not allowed to execute this script.";
+        Duration = 5;
+    })
+    return
+end
+
+local hitboxSize = 15
+
+-- set the hitbox color
+local hitboxColor = Color3.fromRGB(0, 0, 255)
+
+-- create the hitbox part
+local function createHitbox(player)
+    local hitbox = Instance.new("Part")
+    hitbox.Name = "Hitbox"
+    hitbox.Size = Vector3.new(hitboxSize, hitboxSize, hitboxSize)
+    hitbox.Color = hitboxColor
+    hitbox.Transparency = 0.5
+    hitbox.CanCollide = false
+    hitbox.Anchored = true
+    hitbox.Parent = player.Character
+
+    return hitbox
+end
+
+-- create hitboxes for all players
+for _, player in ipairs(game.Players:GetPlayers()) do
+    if player ~= game.Players.LocalPlayer then
+        createHitbox(player)
+    end
+end
+
+-- connect the update function to the player's move events
+game:GetService("RunService").Stepped:Connect(function()
+    for _, player in ipairs(game.Players:GetPlayers()) do
+        if player ~= game.Players.LocalPlayer then
+            local playerHitbox = player.Character:FindFirstChild("Hitbox")
+            if not playerHitbox then
+                -- create a new hitbox if one doesn't already exist
+                playerHitbox = createHitbox(player)
+            else
+                -- update the existing hitbox's properties
+                playerHitbox.Size = Vector3.new(hitboxSize, hitboxSize, hitboxSize)
+                playerHitbox.Color = hitboxColor
+            end
+            
+            -- update the hitbox's position to match the player's character
+            playerHitbox.CFrame = player.Character.HumanoidRootPart.CFrame
+        end
+    end
+end)
+
+wait(0.5)
+
+if player.Name == allowedUsername then
+    game.StarterGui:SetCore("SendNotification", {
+        Title = "Access Granted";
+        Text = "You are allowed to execute this script.";
+        Duration = 5;
+    })
+else
+    game.StarterGui:SetCore("SendNotification", {
+        Title = "Access Denied";
+        Text = "You are not allowed to execute this script.";
+        Duration = 5;
+    })
+end
+
+wait(0.5)
+game.StarterGui:SetCore("SendNotification", {
+    Title = "Made by Aaron";
+    Text = "Thanks for using my script!";
+    Duration = 5;
+})
