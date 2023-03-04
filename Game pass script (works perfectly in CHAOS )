@@ -9,7 +9,7 @@ end
 -- show the notification
 wait(0.5)
 game.StarterGui:SetCore("SendNotification", {
-    Title = "Credits by Aaron";
+    Title = "Made by Aaron";
     Text = "Thanks for using my script!";
     Duration = 5;
 })
