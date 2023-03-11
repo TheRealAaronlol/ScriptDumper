@@ -1,0 +1,2 @@
+local ohString1 = "BurnStart"
+game:GetService("ReplicatedStorage").MAIN_EVENT:FireServer(ohString1)
